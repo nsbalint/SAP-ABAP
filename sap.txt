@@ -1,0 +1,548 @@
+1.::::::::::::::::::::::::::::::::::::::::::::::
+4.5.3	Rendszerdátum
+Írjon programot, amely kiírja az aktuális rendszer dátumot 3 különböző formátumban!
+
+CLASS z_system_date DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+    INTERFACES:
+      if_oo_adt_classrun.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+CLASS z_system_date IMPLEMENTATION.
+    METHOD if_oo_adt_classrun~main.
+    DATA: system_date TYPE d.
+
+        system_date = sy-datum.
+
+        DATA(year) = system_date(4).
+        DATA(month) = system_date+4(2).
+        DATA(day) = system_date+6(2).
+
+        out->write( |Present Date is: { system_date }| ).
+        out->write( |Present Date is: { day }{ month }{ year }| ).
+        out->write( |Present Date is: { month }{ day }{ year }| ).
+  ENDMETHOD.
+ENDCLASS.
+
+2.::::::::::::::::::::::::::::::::::::::::::::::
+4.5.4	Belépési adatok
+Írjon programot amely kiírja a rendszer belépési adatait (felhasználó azonosítója, rendszer dátum és idő, belépési kliens és belépési nyelv)!
+
+CLASS z_login_data DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+    INTERFACES:
+        if_oo_adt_classrun.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+CLASS z_login_data IMPLEMENTATION.
+    METHOD if_oo_adt_classrun~main.
+
+    "Rendszer dátum és idő
+    DATA: lv_system_time TYPE timestampl,
+          lv_system_date TYPE d,
+          lv_system_time_formatted TYPE string.
+
+    "Belépési adatok
+    DATA: lv_user TYPE sy-uname,
+          lv_client TYPE sy-mandt,
+          lv_language TYPE sy-langu.
+
+    "Rendszer dátum és idő lekérése
+    GET TIME STAMP FIELD lv_system_time.
+    lv_system_date = sy-datum.
+    lv_system_time_formatted = lv_system_time.
+    lv_system_time_formatted = lv_system_time_formatted+8(6).
+
+    "Belépési adatok lekérése
+    lv_user = sy-uname.
+    lv_client = sy-mandt.
+    lv_language = sy-langu.
+
+    "Kiíratás
+    out->write( |User: { lv_user }, Date: { lv_system_date }, Time: { lv_system_time_formatted }, Client: { lv_client }, Language: { lv_language }| ).
+
+    ENDMETHOD.
+ENDCLASS.
+
+3.::::::::::::::::::::::::::::::::::::::::::::::
+5.3.4	Medián számítás
+Definiáljon 10 egész számot és adjon értékül tetszőleges generált értéket! Számítsa ki a számok medián értékét és írja ki a standard kimenetre!
+
+ENDCLASS.CLASS z_median DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+  INTERFACES:
+      if_oo_adt_classrun.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+
+CLASS z_median IMPLEMENTATION.
+    METHOD if_oo_adt_classrun~main.
+    DATA: szamok TYPE TABLE OF i,
+          median TYPE p DECIMALS 1.
+
+    DATA random  TYPE i.
+    DATA egesz_rand TYPE i.
+
+    DO 10 TIMES.
+    random = sy-uzeit + sy-index.
+    egesz_rand = cl_abap_random_int=>create( seed = random
+                                       min  = 1
+                                       max = 100 )->get_next( ).
+    APPEND egesz_rand TO szamok.
+    ENDDO.
+
+    SORT szamok ASCENDING.
+    out->write( szamok ).
+
+
+   median = ( szamok[ 5 ] + szamok[ 6 ] ) / 2.
+
+   out->write( median ).
+
+
+    ENDMETHOD.
+ENDCLASS.
+
+4.::::::::::::::::::::::::::::::::::::::::::::::
+5.3.5	Minimum és maximum keresés
+Definiáljon 10 egész számot és adjon értékül tetszőleges generált értéket! Írja ki a képernyőre a legkisebb és legnagyobb generált számot!
+
+CLASS z_minmax DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+  INTERFACES:
+      if_oo_adt_classrun.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+
+CLASS z_minmax IMPLEMENTATION.
+    METHOD if_oo_adt_classrun~main.
+    DATA: szamok TYPE TABLE OF i,
+          median TYPE p.
+
+    DATA random  TYPE i.
+    DATA egesz_rand TYPE i.
+
+    DO 10 TIMES.
+    random = sy-uzeit + sy-index.
+    egesz_rand = cl_abap_random_int=>create( seed = random
+                                       min  = 1
+                                       max = 100 )->get_next( ).
+    APPEND egesz_rand TO szamok.
+    out->write( szamok ).
+   ENDDO.
+
+
+
+    SORT szamok ASCENDING.
+
+    DATA: min TYPE i,
+          max TYPE i.
+
+          min = szamok[ 1 ].
+          max = szamok[ 10 ].
+
+    out->write( |min: { min } max: { max }| ).
+
+
+    ENDMETHOD.
+ENDCLASS.
+
+5.::::::::::::::::::::::::::::::::::::::::::::::
+6.6.3	Féléves eredmények
+Írjon olyan futtatható ABAP állományt, amely a hallgató tantárgyának eredményéhez tárolásához szükséges adatokhoz (tantárgy kódja, tantárgy neve, érdemjegy (1,2,3,4,5), érdemjegy szövegesen (elégtelen, elégséges, közepes, jó, jeles) saját típusokat definiál. 
+Hozzon létre 5 változót és töltse fel adatokkal. A tantárgy kódját és nevét tetszőlegesen megválaszthatja, a tantárgy érdemjegyét véletlenszerűen generálja! Írja ki a változók tartalmát a képernyőre!
+
+
+CLASS z_uniclass DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+    INTERFACES:
+      if_oo_adt_classrun.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+
+CLASS z_uniclass IMPLEMENTATION.
+    METHOD if_oo_adt_classrun~main.
+
+    TYPES: BEGIN OF student,
+        subject_code TYPE c LENGTH 3,
+        subject_name TYPE string,
+        grade TYPE i,
+        grade_written TYPE string,
+    END OF student.
+
+    DATA random  TYPE i.
+    DATA egesz_rand TYPE i.
+    random = sy-uzeit.
+    egesz_rand = cl_abap_random_int=>create( seed = random
+                                       min  = 1
+                                       max = 5 )->get_next( ).
+
+    DATA aladar TYPE student.
+        aladar-subject_code = 'PRG'.
+        aladar-subject_name = 'Programozas'.
+        aladar-grade = egesz_rand.
+        CASE aladar-grade.
+        WHEN 1.
+            aladar-grade_written = 'elegtelen'.
+        WHEN 2.
+            aladar-grade_written = 'elegseges'.
+        WHEN 3.
+            aladar-grade_written = 'kozepes'.
+        WHEN 4.
+            aladar-grade_written = 'jo'.
+        WHEN 5.
+            aladar-grade_written = 'jeles'.
+        ENDCASE.
+
+    random = sy-uzeit + 1.
+    egesz_rand = cl_abap_random_int=>create( seed = random
+                                       min  = 1
+                                       max = 5 )->get_next( ).
+
+
+    DATA bela TYPE student.
+        bela-subject_code = 'ART'.
+        bela-subject_name = 'Rajz'.
+        bela-grade = egesz_rand.
+        CASE bela-grade.
+        WHEN 1.
+            bela-grade_written = 'elegtelen'.
+        WHEN 2.
+            bela-grade_written = 'elegseges'.
+        WHEN 3.
+            bela-grade_written = 'kozepes'.
+        WHEN 4.
+            bela-grade_written = 'jo'.
+        WHEN 5.
+            bela-grade_written = 'jeles'.
+        ENDCASE.
+
+    random = sy-uzeit + 2.
+    egesz_rand = cl_abap_random_int=>create( seed = random
+                                       min  = 1
+                                       max = 5 )->get_next( ).
+
+    DATA csaba TYPE student.
+        csaba-subject_code = 'MAT'.
+        csaba-subject_name = 'Matematika'.
+        csaba-grade = egesz_rand.
+        CASE csaba-grade.
+        WHEN 1.
+            csaba-grade_written = 'elegtelen'.
+        WHEN 2.
+            csaba-grade_written = 'elegseges'.
+        WHEN 3.
+            csaba-grade_written = 'kozepes'.
+        WHEN 4.
+            csaba-grade_written = 'jo'.
+        WHEN 5.
+            csaba-grade_written = 'jeles'.
+        ENDCASE.
+
+    random = sy-uzeit + 3.
+    egesz_rand = cl_abap_random_int=>create( seed = random
+                                       min  = 1
+                                       max = 5 )->get_next( ).
+
+    DATA david TYPE student.
+        david-subject_code = 'CHE'.
+        david-subject_name = 'Kémia'.
+        david-grade = egesz_rand.
+        CASE david-grade.
+        WHEN 1.
+            david-grade_written = 'elegtelen'.
+        WHEN 2.
+            david-grade_written = 'elegseges'.
+        WHEN 3.
+            david-grade_written = 'kozepes'.
+        WHEN 4.
+            david-grade_written = 'jo'.
+        WHEN 5.
+            david-grade_written = 'jeles'.
+        ENDCASE.
+
+
+    random = sy-uzeit + 4.
+    egesz_rand = cl_abap_random_int=>create( seed = random
+                                       min  = 1
+                                       max = 5 )->get_next( ).
+
+    DATA elemer TYPE student.
+        elemer-subject_code = 'HIS'.
+        elemer-subject_name = 'Történelem'.
+        elemer-grade = egesz_rand.
+        CASE elemer-grade.
+        WHEN 1.
+            elemer-grade_written = 'elegtelen'.
+        WHEN 2.
+            elemer-grade_written = 'elegseges'.
+        WHEN 3.
+            elemer-grade_written = 'kozepes'.
+        WHEN 4.
+            elemer-grade_written = 'jo'.
+        WHEN 5.
+            elemer-grade_written = 'jeles'.
+        ENDCASE.
+
+
+    out->write( aladar ).
+    out->write( bela ).
+    out->write( csaba ).
+    out->write( david ).
+    out->write( elemer ).
+
+
+
+    ENDMETHOD.
+ENDCLASS.
+
+6.::::::::::::::::::::::::::::::::::::::::::::::
+7.5.1	Számok sorrendben
+Írjon ABAP programot, amely kiírja a számokat -5-től 5-ig, majd vissza 1-es „lépésközt” használva!
+A kimenetnek erre kell hasonlítania: -5 -4 -3 -2 -1 0 1 2 3 4 5 4 3 2 1 0 -1 -2 -3 -4 -5
+
+CLASS z_number_step DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+  INTERFACES:
+      if_oo_adt_classrun.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+
+CLASS z_number_step IMPLEMENTATION.
+    METHOD if_oo_adt_classrun~main.
+
+    DATA x type i value -5.
+    DATA been_five type i value 0.
+
+    DO 21 TIMES.
+    out->write( x ).
+    IF x LT 5 AND been_five EQ 0.
+        x = x + 1.
+    ELSEIF x = 5.
+        been_five = 1.
+        x = x - 1.
+    ELSEIF x LT 5 AND been_five EQ 1.
+        x = x - 1.
+    ENDIF.
+    ENDDO.
+
+    ENDMETHOD.
+ENDCLASS.
+
+
+7.::::::::::::::::::::::::::::::::::::::::::::::
+Írjon olyan futtatható ABAP állományt, amely 100 véletlen egész számot generál a 0 – 100 intervallumban! 
+Írja ki a képernyőre a legkisebb és legnagyobb számot! 
+Amennyiben generálás során a – végül – legkisebb, vagy legnagyobb szám többször került generálásra, akkor írja ki az ismétlések számát is!
+
+CLASS z_findminmax DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+    INTERFACES:
+      if_oo_adt_classrun.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+
+CLASS z_findminmax IMPLEMENTATION.
+    METHOD if_oo_adt_classrun~main.
+
+    DATA szamok TYPE TABLE OF i.
+    DATA random  TYPE i.
+    DATA egesz_rand TYPE i.
+
+    DO 100 TIMES.
+    random = sy-uzeit + sy-index.
+    egesz_rand = cl_abap_random_int=>create( seed = random
+                                       min  = 0
+                                       max = 100 )->get_next( ).
+    APPEND egesz_rand TO szamok.
+    ENDDO.
+
+    DATA: min type i value 100,
+          max type i value 0,
+          min_counter type i value 0,
+          max_counter type i value 0.
+
+    DO 100 TIMES.
+        IF min GT szamok[ sy-index ].
+            min = szamok[ sy-index ].
+        ENDIF.
+         IF max LT szamok[ sy-index ].
+            max = szamok[ sy-index ].
+        ENDIF.
+    ENDDO.
+
+    DO 100 TIMES.
+        IF min EQ szamok[ sy-index ].
+            min_counter = min_counter + 1.
+        ENDIF.
+        IF max EQ szamok[ sy-index ].
+            max_counter = max_counter + 1.
+        ENDIF.
+    ENDDO.
+
+    out->write( szamok ).
+    out->write( |min: { min } min count: { min_counter } max: { max }  max count: { max_counter }| ).
+
+
+
+    ENDMETHOD.
+ENDCLASS.
+
+8.::::::::::::::::::::::::::::::::::::::::::::::
+8.5.2	Legnagyobb prím osztó
+Keresse meg a legnagyobb prím osztóját a 4512854875 számnak! Az eredményt írja ki a képernyőre!
+
+CLASS z_greatest_prime DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+  INTERFACES:
+      if_oo_adt_classrun.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+
+CLASS z_greatest_prime IMPLEMENTATION.
+    METHOD if_oo_adt_classrun~main.
+    DATA x TYPE int8 VALUE 4512854875.
+    DATA osztok TYPE TABLE OF i.
+    DATA primek TYPE TABLE OF i.
+    DATA szam TYPE i VALUE 2.
+    DATA is_prime TYPE i.
+    DATA index TYPE i.
+    DATA prime type i.
+
+    DO 1000 TIMES.
+        is_prime = 1.
+
+        LOOP AT primek INTO prime.
+            IF szam MOD prime = 0. " Ha az aktuális szám osztható egy már meglévő prímszámmal
+                is_prime = 0. " Nem prímszám
+                EXIT. " Kilépés a belső ciklusból
+            ENDIF.
+        ENDLOOP.
+
+        IF is_prime = 1. " Ha a szám prímszám
+            APPEND szam TO primek. " Hozzáadjuk a prímszámok tömbjéhez
+        ENDIF.
+
+        szam = szam + 1. " Következő számra lépés
+    ENDDO.
+
+
+    WHILE x > 1.
+        LOOP AT primek INTO prime.
+            IF x MOD prime = 0.
+                x = x / prime.
+                APPEND prime TO osztok.
+                EXIT. " Kilépés, ha találtunk osztót
+            ENDIF.
+        ENDLOOP.
+   ENDWHILE.
+
+    out->write( osztok ).
+    SORT osztok DESCENDING.
+    DATA legnagyobb_oszto TYPE i.
+    legnagyobb_oszto = osztok[ 1 ].
+    out->write( |Legnagyobb oszto: { legnagyobb_oszto }| ).
+
+
+
+    ENDMETHOD.
+ENDCLASS.
+
+9.::::::::::::::::::::::::::::::::::::::::::::::
+9.3.3	Átlagszámítás
+Generáljon belső táblázatot véletlen egész számokkal és számolja ki az elemek átlagát!
+
+CLASS z_avg DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+  INTERFACES:
+      if_oo_adt_classrun.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+
+CLASS z_avg IMPLEMENTATION.
+    METHOD if_oo_adt_classrun~main.
+
+    DATA szamok TYPE TABLE OF i.
+    DATA random  TYPE i.
+    DATA egesz_rand TYPE i.
+    DATA osszeg TYPE i VALUE 0.
+    DATA atlag TYPE p DECIMALS 2.
+    DATA x TYPE i value 10.
+
+    DO x TIMES.
+    random = sy-uzeit + sy-index.
+    egesz_rand = cl_abap_random_int=>create( seed = random
+                                       min  = 1
+                                       max = 10000 )->get_next( ).
+    APPEND egesz_rand TO szamok.
+    osszeg = osszeg + egesz_rand.
+    ENDDO.
+
+    atlag = osszeg / x.
+
+    out->write( szamok ).
+    out->write( |átlag: { atlag }| ).
+
+    ENDMETHOD.
+ENDCLASS.

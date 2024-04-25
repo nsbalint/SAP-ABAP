@@ -1,4 +1,9 @@
-CLASS z_system_date DEFINITION
+
+  //  4.5.3	Rendszerdátum
+  //  Írjon programot, amely kiírja az aktuális rendszer dátumot 3 különböző formátumban!
+
+
+CLASS z_sys_date DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC .
@@ -10,17 +15,17 @@ CLASS z_system_date DEFINITION
   PRIVATE SECTION.
 ENDCLASS.
 
-CLASS z_system_date IMPLEMENTATION.
+CLASS z_sys_date IMPLEMENTATION.
     METHOD if_oo_adt_classrun~main.
-    DATA: system_date TYPE d.
+    DATA: sys_date TYPE d.
 
-        system_date = sy-datum.
+        sys_date = sy-datum.
 
-        DATA(year) = system_date(4).
-        DATA(month) = system_date+4(2).
-        DATA(day) = system_date+6(2).
+        DATA(year) = sys_date(4).
+        DATA(month) = sys_date+4(2).
+        DATA(day) = sys_date+6(2).
 
-        out->write( |Present Date is: { system_date }| ).
+        out->write( |Present Date is: { sys_date }| ).
         out->write( |Present Date is: { day }{ month }{ year }| ).
         out->write( |Present Date is: { month }{ day }{ year }| ).
   ENDMETHOD.
